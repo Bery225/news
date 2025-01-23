@@ -1,36 +1,45 @@
 import { Injectable } from '@angular/core';
-import {Storage} from "@ionic/storage-angular";
-import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+import { Storage } from '@ionic/storage-angular';
+import { BehaviorSubject } from 'rxjs';
 
 const STORAGE_KEY = "mylist";
+
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
+  private dataSubject = new BehaviorSubject<any[]>([]);
+  data$ = this.dataSubject.asObservable();
 
   constructor(private storage: Storage) {
-    this.init()
+    this.init();
   }
 
-  async init(){
-    await this.storage.defineDriver(CordovaSQLiteDriver);
+  async init() {
     await this.storage.create();
-
-
+    this.loadStoredData();
   }
-  getData(){
 
-    return this.storage.get(STORAGE_KEY) || [];
+  async loadStoredData() {
+    const storedData = (await this.storage.get(STORAGE_KEY)) || [];
+    this.dataSubject.next(storedData);
   }
-  async addData(item: any){
-    const storedData = await this.storage.get(STORAGE_KEY) || [];
+
+  async getData(): Promise<any[]> {
+    return (await this.storage.get(STORAGE_KEY)) || [];
+  }
+
+  async addData(item: any) {
+    const storedData = await this.getData();
     storedData.push(item);
-    return this.storage.set(STORAGE_KEY, storedData);
+    await this.storage.set(STORAGE_KEY, storedData);
+    this.dataSubject.next(storedData);  
   }
 
-  async removeItem(index: any){
-    const storedData = await this.storage.get(STORAGE_KEY) || [];
+  async removeItem(index: number) {
+    const storedData = await this.getData();
     storedData.splice(index, 1);
-    return this.storage.set(STORAGE_KEY, storedData);
+    await this.storage.set(STORAGE_KEY, storedData);
+    this.dataSubject.next(storedData);  
   }
 }

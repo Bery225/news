@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 
+
 @Component({
   selector: 'app-details',
   templateUrl: './details.page.html',
@@ -10,6 +11,7 @@ import { CommonModule } from '@angular/common';
   imports: [IonicModule, CommonModule]
 })
 export class DetailsPage implements OnInit {
+
   author: any
   content: any
   description: any
@@ -19,7 +21,7 @@ export class DetailsPage implements OnInit {
   url: any
   image: any
 
-  constructor(private router:Router, private activatedRoute:ActivatedRoute) { }
+  constructor(private router:Router, private activatedRoute:ActivatedRoute,) { }
 
   ngOnInit() {
     this.author = this.activatedRoute.snapshot.queryParamMap.get('author')
@@ -34,5 +36,5 @@ export class DetailsPage implements OnInit {
   goToHomePage() {
     this.router.navigate(['/']);
   }
-  
+
 }
