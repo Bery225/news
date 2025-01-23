@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 2
+      Your bookmarked articles
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,9 +9,30 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
+      <ion-title size="large">Blank</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <ion-list>
+    <ion-row style="background-color: #dedede94; border-radius: 16px;" class="ion-margin" *ngFor="let article of listData; let i = index;">
+      
+      <ion-col size="4">
+        <img style="width: 300px;height: 100px;object-fit: cover; border-radius: 5px;" src="{{article.urlToImage}}">
+      </ion-col>
+
+      <ion-col size="8"  (click)="getDetails(article)">
+        <ion-label>
+          {{article.author}}
+          <p>{{article.publishedAt | date}}</p>
+          <p style="font-weight: 200;">{{article.title}}</p>
+        </ion-label>
+      </ion-col>
+      <ion-button fill="clear"  (click) = "removeItem(article)">
+        <ion-icon name="bookmark"></ion-icon>
+      </ion-button>
+    </ion-row>
+    
+  </ion-list>
+
+
 </ion-content>
